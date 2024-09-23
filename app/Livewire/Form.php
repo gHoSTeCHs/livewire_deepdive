@@ -8,9 +8,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Form extends Component
 {
+    use WithPagination;
 
     #[Rule('required|min:2|max:50')]
     public string $name;
@@ -21,13 +23,13 @@ class Form extends Component
 
     public function render(): Factory|View|Application
     {
-        $users = User::all();
+        $users = User::paginate(2);
         return view('livewire.form', [
             'users' => $users
         ]);
     }
 
-    public function createNewUser()
+    public function createNewUser(): void
     {
         $this->validate();
         User::create(
@@ -37,5 +39,9 @@ class Form extends Component
                 'password' => $this->password
             ]
         );
+
+        $this->reset(['name', 'email', 'password']);
+
+        request()->session()->flash('success', 'User created successfully');
     }
 }

@@ -15,11 +15,11 @@ class Clicker extends Component
         return view('livewire.clicker');
     }
 
-    public function increment()
+    public function increment(): void
     {
         $this->count++;
     }
-    public function decrement()
+    public function decrement(): void
     {
         $this->count--;
     }
